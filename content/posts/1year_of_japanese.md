@@ -1,7 +1,6 @@
 ---
 title: "First-year self-leaning Japanese "
 date: 2024-01-28T23:52:18+02:00
-draft: true
 toc: false
 images:
 tags:
