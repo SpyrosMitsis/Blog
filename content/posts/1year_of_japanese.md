@@ -45,11 +45,11 @@ halfway point of book 3.
 In the core 2k deck I only managed to learn 1161 new words (btw to reach 2000 new words it means that you have to learn 5.5 new words per day).
 
 The only goal that I could say I almost achieved is the Kanji.
-I can read and write (using the correct stroke order) 987 unique Kanji, again still falling short on that 1000 but for this one i do not feel
+I can read and write (using the correct stroke order) 987 unique Kanji, again still falling short of that 1000 but for this one, I do not feel
 so bad lol.
 
 After all this time sometimes I wonder if is it even worth doing this.
-It just feels like a nonstop grind were I will never see the benefit.
+It just feels like a nonstop grind where I will never see the benefit.
 After some thinking, I arrived at my decision.
 
 *I believe Japanese is_ still worth all the pain*
@@ -67,10 +67,9 @@ unhappiness with what you are doing.
 
 I understand that It might seem intimidating at first but unfortunately, there is no other way around it.
 To do what I am preaching I will start this  [30-day Japanese challenge](https://learnjapanese.moe/routine/) by the Moe Way.
+I understand that this challenge is targeted at complete beginners but it also really focuses on immersion, and on that part, I am a complete novice.
 
-I undestand that this challenge is targeted at complete beginners but it also really focuses on immersion, and on that part, I am a complete novice.
-
-This challenge forces you to listen to native material and really try to immerse yourself in the language.
+This challenge forces you to listen to native material and try to immerse yourself in the language.
 In conjunction with the challenge, I will also start mining words inside my immersion and stop using a pre-made deck.
 Hopefully, this will re-ignite my passion for the Japanese language and I will be able to get out of this seemingly never-ending slump.
 

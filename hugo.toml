@@ -1,5 +1,5 @@
-baseurl      = "https://spyrosmitsis.netlify.app/"
-title        = "My Blog"
+baseurl      = "https://spyrosmitsis.netlify.app"
+title        = "Spyros Mitsis"
 languageCode = "en-us"
 theme        = "hello-friend-ng"
 paginate     = 10
@@ -45,7 +45,7 @@ paginate     = 10
       logoText = "cd ~/"
       logoHomeLink = "/"
 
-  [[menu.main]]
-    identifier = "blog"
-    name       = "Blog"
-    url        = "/posts"
+[[menu.main]]
+  identifier = "blog"
+  name       = "Blog"
+  url        = "/posts"
