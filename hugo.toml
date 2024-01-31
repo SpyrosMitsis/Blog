@@ -1,10 +1,22 @@
-baseurl      = "https://spyrosmitsis.netlify.app/ "
+baseurl      = "https://spyrosmitsis.netlify.app/"
 title        = "Spyros Mitsis"
 languageCode = "en-us"
 theme        = "hello-friend-ng"
 paginate     = 10
+pygmentsCodefences = true
+pygmentsStyle = "github-dark"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['\[', '\]'], ['$$', '$$']]
+          inline = [['\(', '\)']]
 
 [params]
+  math = true
   dateform        = "Jan 2, 2006"
   dateformShort   = "Jan 2"
   dateformNum     = "2006-01-02"
