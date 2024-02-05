@@ -2,8 +2,9 @@
 title: "Using the minimax algorithm for Tic Tac Toe "
 date: 2024-01-31T13:56:01+02:00
 draft: false
-toc: false
+toc: true
 images: 
+math: katex
 tags:
   - Machine learning
   - Minimax
@@ -13,7 +14,7 @@ tags:
 
 
   This week in my uni I was tasked to create a simple tic-tac-toe application in Python so that we can familiarize 
-  ourselves with the notion of two-dimensional arrays and OOP in python.
+  ourselves with the notion of two-dimensional arrays and OOP in Python.
 
   Creating the board itself was very simple alongside the method for displaying the array was easy.
 
@@ -61,7 +62,7 @@ I understand that playing while keeping in mind that arrays are indexed 0 is not
 exercise was implementing the minimax algorithm.
 
 
-Before we can start implementing the algorithm we must first a couple of pre-requisites:
+Before we can start implementing the algorithm we must first fulfill a couple of pre-requisites:
   - make a method that gets the winner
   - make a method that sees if there is a tie
 
@@ -262,7 +263,7 @@ Now let's actually implement the minimax algorithm.
 The first thing this method does is evaluate the score.
 
 By looking at the evaluation method we can see that unless we reach a terminal state the
-method will return `None` , in the minimax function we check if we have reached a terminal state and if so
+method will return `None`, in the minimax function we check if we have reached a terminal state, and if so
 we return the score.
 
 The algorithm revolves around two players, and so we have a big `if` statement.
@@ -270,12 +271,12 @@ The algorithm revolves around two players, and so we have a big `if` statement.
 If max_player is true, we are the maximizing player and so we must set the value at something as low as possible.
 In this case, I went `-2` which is lower than the lowest possible value.
 
-Then we perform two loops to loop inside the entire two-dimensional array.
+Then we perform two loops to inspect the entire two-dimensional array.
 If we find a free spot we place our `"O"` in that spot.
-at this time we iterate by calling the `minimax()` again, increasing the depth value and changing the `max_player` to False.
+At this time we iterate by calling the `minimax()` again, increasing the depth value and changing the `max_player` to False.
 then we turn the board back to its original state and call the `max()` function.
 This keeps track of the maximum value encountered among the possible moves.
-What we did here is called the method again but this time as the minimizing player because the maximizing player just played
+What we did here is call the method again but this time as the minimizing player because the maximizing player just played
 their turn.
 
 Now that the `max_player` variable is false, we fall into the else clause.
@@ -285,6 +286,451 @@ level of the game tree with max_player set to True, and then reverts the move, k
 the minimum value encountered among the possible moves.
 
 Finally, this function returns the maximum or minimum value, depending on whether it's the turn of the maximizing or minimizing player, respectively.
+
+Now that we have the algorithm we need to make a function that will return the best move for that specific instance of the game tree.
+
+```python
+    def best_move(self):
+        best_score = float('-inf')
+        best_move = None
+    
+        for i in range(3):
+            for j in range(3):
+                if self.board[i][j] == "-":
+                    self.board[i][j] = "O"  
+                    move_score = self.minimax(0, False)
+                    self.board[i][j] = '-'
+    
+                    if move_score > best_score:
+                        best_move = (i, j)
+                        best_score = move_score
+    
+        return best_move
+
+```
+
+First thing we do is initialize the best_score value. Just for fun instead of the usual `-2` I went with `float(-inf)`.
+Second, we initialize best_move, which is going to be our tic-tac-toe coordinates, to None.
+
+Now we iterate through our tic-tac-toe board using the usual nested for loops.
+If we find a space then we place the `O` value, and then we call upon the `minimax`()` function
+this function will evaluate the score for the current move.
+The `False` argument indicates that this is not the maximizing player's turn, meaning it's the turn of the opponent.
+The next line reverts the board back to its original state, ensuring that the game state remains unchanged for the next iteration.
+
+The last part of this method simply checks if the score obtained for the current move is better than the previous best score.
+If it is we save the specific coordinates inside the best_move variable and then update the best_score variable to the current move_score variable.
+
+And now simply return the best_move and the algorithm is complete.
+
+
+Or is it...
+
+## Implementing α-β pruning
+
+Actually, yeah, this algorithm is complete and it works perfectly fine as is, but Minimax on its own performs a lot of extra steps that are not needed.
+Using α-β pruning can increase the performance of this algorithm without impacting its effectiveness.
+
+The basic idea behind Alpha-Beta pruning is to prune branches of the search tree that cannot influence the final decision.
+It maintains two branches, alpha and beta, to keep track of the range of possible values for the maximizing and the minimizing player.
+The pruning occurs when it is determined that certain branches will not affect the final decision.
+
+Let's see how this algorithm works:
+
+
+First things first, we must define both alpha and beta.
+
+- Because alpha is used for the maximizing player we will give it a default value of `-∞`.
+- Now for beta, because it's used by the minimizing player we will give it a default value of `+∞`.
+- We will prune the node only when alpha becomes greater than or equal to beta.
+
+
+![empty alpha-beta tree](/ab_tree_empty.jpg)
+
+
+Let's move to the first node that isn't the root node, B.
+Because alpha is less than beta we don't prune out the tree, and we move to the next turn.
+
+Now it's the maximizing player turn. At node D the value of alpha will be calculated
+More specifically node D has two options either `2` or `3`, because 
+it's the maximizing player turn, they will choose option `3`.
+Since `3 > -∞` alpha has now become `3` and because `3 < ∞`  beta will also become `3`.
+
+So at node B at this moment:
+- α = -∞
+- β = 3
+
+
+![first_step](/first_step.jpg)
+
+Now the minimax algorithm will traverse the next child node of B which is E.
+
+The first value that appears under E is 5.
+That means that at node E `α = 5` and `β = 5` 
+
+This will now satisfy the condition that we can only prune when alpha becomes equal to or greater than beta.
+What this means is that 
+At node E `α = 5` and `α > β` so we don't even need to compute the other outcome of the tree because in node B, when the minimizing player
+is playing, they will always choose the optimal path for them (meaning the minimum number smallest number of beta) and so the game will never reach
+the node E so we don't even need to calculate the last part.
+
+![first_prune](/first_prune.jpg)
+
+
+ In the next step, the algorithm goes all the way back to the node A.
+ At node A alpha will be compared between -∞ and 3. So now alpha will become 3 and beta will be ∞.
+
+Now the next step the algorithm will move to node C where the same values of alpha and beta will be transferred.
+
+Now the algorithm has reached node F. 
+Node F has values 0 and 1 because it's the maximizer player. The return f will be 1 but alpha(3) is still bigger so it will remain unchanged.
+
+![second_step](/second_step.jpg)
+
+Now node F will return the node value 1 to C and will compare to the beta value at C. Now it's the minimizer players' turn. So beta will be compared between
++∞ and 1. 
+So now at node C:
+
+-  alpha = 3
+-  beta  = 1
+
+Because alpha is greater than beta, this satisfies the pruning condition so the rest of the tree can be pruned
+
+![second_pruning](/second_pruning.jpg)
+
+Now, C will return the node value to A and the best value of A will be between 1 and 3 so alpha will remain 3.
+
+![last_step](/last_step.jpg)
+
+To implement this in code it's actually super simple.
+All that is needed is to add the alpha and beta variables inside the minimax algorithm and simply check if beta is less or equal to alpha.
+
+
+Here is the updated code:
+
+```python
+    def minimax(self, depth, alpha, beta, max_player):
+
+        score = self.evaluate()
+
+        if score is not None:
+            return score
+        
+        if max_player:
+            max_value = -2
+            for i in range(3):
+                for j in range(3):
+                    if self.board[i][j] == '-':
+                        self.board[i][j] = 'O'
+                        eval = self.minimax(depth + 1, alpha, beta, False)
+                        self.board[i][j] = '-'
+                        max_value = max(max_value, eval)
+                        alpha = max(alpha, eval)
+
+                        if beta <= alpha:
+                            break
+
+            return max_value
+
+        else:
+            min_value = 2
+            for i in range(3):
+                for j in range(3):
+                    if self.board[i][j] == '-':
+                        self.board[i][j] = 'X'
+                        eval = self.minimax(depth + 1,alpha, beta, True)
+                        self.board[i][j] = "-"
+                        min_value = min(min_value, eval)
+                        beta = min(beta, eval)
+                        
+                        if beta <= alpha:
+                            break
+            return min_value
+
+```
+
+Here is the updated code for the best move method:
+
+```python
+    def best_move(self):
+        
+        start_time = time.time()
+
+        best_score = float('-inf')
+        best_move = None
+        
+        alpha = float('-inf')
+        beta = float('inf')
+
+        for i in range(3):
+            for j in range(3):
+                if self.board[i][j] == "-":
+                    self.board[i][j] = "O"  
+                    move_score = self.minimax(0,alpha, beta, False)
+                    self.board[i][j] = '-'
+
+                    if move_score > best_score:
+                        best_move = (i, j)
+                        best_score = move_score
+
+                
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Minimax execution time: {execution_time:.6f} seconds")
+
+        return best_move
+```
+All that is new here is that we simply initialized alpha and beta.
+
+
+To test the effectiveness I timed the execution time of both the naive minimax and the minimax with alpha-beta pruning and here are the results.
+
+
+Naive minimax execution time:
+![naive_minimax](/naive_alpha_beta.png)
+
+Minimax with alpha-beta pruning execution time:
+![alpha_beta](/alpha-beta.png)
+
+
+As you can see there is a noticeable execution time difference.
+Although alfa-beta pruning performs reasonably well for this example, this doesn't mean that it's this magical silver bullet that 
+can decrease the execution time all the time.
+
+In fact without alpha-beta pruning in some cases has the same performance of minimax.
+Minimax has a complexity of $O(b^d)$ where b is the number of branches and d is the depth of these branches.
+Now, implementing alfa beta pruning can yield a better result, $O(\sqrt(b^d))$ pruning a branch is not guaranteed.
+This means that even with alpha-beta pruning the algorithm can again perform as $O(b^d)$.
+
+
+
+## Complete code
+
+```python
+import time
+
+class TicTacToe:
+    def __init__(self) -> None:
+        self.board = [
+            ['-', '-', '-'],
+            ['-', '-', '-'],
+            ['-', '-', '-']
+        ]
+
+
+    ''' 
+    Display the board
+    '''
+    def display_board(self):
+        for i in range(3):
+            for j in range(3):
+                print(self.board[i][j], end=' ')
+            print()
+
+    '''
+    Human player makes a move
+    :param player: X or O
+    :return: row, col
+    '''
+    def human_play(self, player):
+
+        while True:
+
+            row = int(input("Row: "))
+            col = int(input("Col: "))
+
+            if row < 0 or row > 2 or col < 0 or col > 2:
+                print("Wrong row or col")
+            elif self.board[row][col] == '-':
+                self.board[row][col] = player
+                return row, col
+            else:
+                print("Error, position is occupied")
+
+
+
+    '''.
+    Check if there is a winner
+    :param player: X or O
+    :return: True or False
+    '''
+    def is_winner(self, player):
+        for i in range(3):
+            if all(self.board[i][j] == player for j in range(3)) or all(self.board[j][i] == player for j in range(3)):
+                return True
+
+        if all(self.board[i][i] == player for i in range(3)) or all(self.board[i][2 - i] == player for i in range(3)):
+            return True
+        return False
+    
+    '''
+    Check if the board is full
+    :return: True or False
+    '''
+    def is_board_full(self):
+        for i in range(3):
+            for j in range(3):
+                if self.board[i][j] == '-':
+                    return False
+        return True
+
+    '''
+    Evaluate the board
+    :return: 1 if O wins, -1 if X wins, 0 if it's a tie
+    '''
+    def evaluate(self):
+
+        if self.is_winner("O"):
+            return 1
+        elif self.is_winner("X"):
+            return -1
+        elif self.is_board_full():
+            return 0
+        else:
+            return None
+            
+
+    '''
+    Minimax algorithm
+    :param depth: depth of the tree
+    :param alpha: alpha value
+    :param beta: beta value
+    :param max_player: True if it's the max player, False if it's the min player
+    :return:
+    '''
+    def minimax(self, depth, alpha, beta, max_player):
+
+        score = self.evaluate()
+
+        if score is not None:
+            return score
+        
+        if max_player:
+            max_value = -2
+            for i in range(3):
+                for j in range(3):
+                    if self.board[i][j] == '-':
+                        self.board[i][j] = 'O'
+                        eval = self.minimax(depth + 1, alpha, beta, False)
+                        self.board[i][j] = '-'
+                        max_value = max(max_value, eval)
+                        alpha = max(alpha, eval)
+
+                        if beta <= alpha:
+                            break
+
+            return max_value
+
+        else:
+            min_value = 2
+            for i in range(3):
+                for j in range(3):
+                    if self.board[i][j] == '-':
+                        self.board[i][j] = 'X'
+                        eval = self.minimax(depth + 1,alpha, beta, True)
+                        self.board[i][j] = "-"
+                        min_value = min(min_value, eval)
+                        beta = min(beta, eval)
+                        
+                        if beta <= alpha:
+                            break
+            return min_value
+
+
+
+    '''
+    Find the best move
+    :return: row, col
+    '''
+    def best_move(self):
+        
+        start_time = time.time()
+
+        best_score = float('-inf')
+        best_move = None
+        
+        alpha = float('-inf')
+        beta = float('inf')
+
+        for i in range(3):
+            for j in range(3):
+                if self.board[i][j] == "-":
+                    self.board[i][j] = "O"  
+                    move_score = self.minimax(0,alpha, beta, False)
+                    self.board[i][j] = '-'
+
+                    if move_score > best_score:
+                        best_move = (i, j)
+                        best_score = move_score
+
+                
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Minimax execution time: {execution_time:.6f} seconds")
+
+        return best_move
+
+
+    '''
+    Computer player makes a move
+    '''
+    def ai_play(self):
+        
+        row, col = self.best_move()
+        self.board[row][col] = 'O'
+
+    ''' 
+    Play the game
+    '''
+    def play_game(self):
+        
+        while True:
+            print("Player move")
+            print("-------")
+            self.display_board()
+            row, col = self.human_play("X")
+
+            self.display_board()
+
+            if self.is_winner("X"):
+                print("You won")
+                break
+            if self.is_board_full():
+                print("It's a tie")
+                break
+
+            self.ai_play()
+            print("-------")
+
+            if self.is_winner("O"):
+                print("You lost")
+                break
+            if self.is_board_full():
+                print("It's a tie")
+                break
+
+
+game = TicTacToe()
+game.play_game()
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
