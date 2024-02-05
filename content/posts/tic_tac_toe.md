@@ -124,7 +124,7 @@ meaning that the board is not full yet.
 Before showing the implementation it is important to understand how the minimax algorithm works.
 
 The minimax algorithm is a backtracking algorithm used in game theory for finding the optimal move in a turn-based game assuming optimal play.
-The algorithm has two players the maximizer and the minimizer.
+The algorithm has two players, the maximizer and the minimizer.
 The maximizer tries to get the highest score possible while the minimizer tries the opposite.
 
 Every board has a state associated with a value, the maximizer tries to move the game toward a game state with the highest score possible.
@@ -151,12 +151,11 @@ Since tic-tac-toe is simple our function can simply be:
 - lose = - 1
 - draw = 0
 
-The evaluation score then gets propagated back up the tree to the root, alternating between maximizing and minimizing players.
+The evaluation score then gets propagated back up the root of the tree, alternating between maximizing and minimizing players.
 The maximizing player will try to maximize the score by choosing a decision that maximizes the evaluation score whilst the
 minimizing player will try to minimize the score.
 
-Once the tree is evaluated, the algorithm selects the move that leads to the highest score if it's the maximizing player's 
-turn or the move that leads to the lowest score if it's the minimizer player's turn.
+Once the tree is evaluated, the algorithm selects the move that leads to the highest score or the lowest score depending on the player.
 
 
 
@@ -183,7 +182,9 @@ this means that we can deduce the evaluation score before reaching a terminal st
 
 More specifically we know that if it's the minimizer's turn, then it can make two plays.
 One will lead it to victory and the other one will not be a terminal state.
-But because after its move it's the maximizing player's turn and they only have one option leading them to victory we can assume 
+But because after the minimizer's turn, it's the maximizing player's turn, they only have one option leading them to victory.
+
+This means that we can assume 
 that choosing the left option in both cases will lead to the minimizer player's loss.
 
 This essentially means that we can take the `+1` state that we get at the end and bring it back to the nonterminal state.
@@ -226,7 +227,7 @@ First things first, let's make an evaluation function.
 As already mentioned tic-tac-toe is a very easy game to make an evaluation function.
 
 
-Now let's actually implement the minimax algorithm.
+Now let's implement the minimax algorithm.
 
 ```python
     def minimax(self, depth, max_player):
@@ -309,14 +310,14 @@ Now that we have the algorithm we need to make a function that will return the b
 
 ```
 
-First thing we do is initialize the best_score value. Just for fun instead of the usual `-2` I went with `float(-inf)`.
+First thing we do is initialize the best_score value. Just for fun instead of the usual `-2`, I went with `float(-inf)`.
 Second, we initialize best_move, which is going to be our tic-tac-toe coordinates, to None.
 
 Now we iterate through our tic-tac-toe board using the usual nested for loops.
 If we find a space then we place the `O` value, and then we call upon the `minimax`()` function
 this function will evaluate the score for the current move.
 The `False` argument indicates that this is not the maximizing player's turn, meaning it's the turn of the opponent.
-The next line reverts the board back to its original state, ensuring that the game state remains unchanged for the next iteration.
+The next line reverts the board to its original state, ensuring that the game state remains unchanged for the next iteration.
 
 The last part of this method simply checks if the score obtained for the current move is better than the previous best score.
 If it is we save the specific coordinates inside the best_move variable and then update the best_score variable to the current move_score variable.
@@ -377,7 +378,7 @@ the node E so we don't even need to calculate the last part.
 ![first_prune](/first_prune.jpg)
 
 
- In the next step, the algorithm goes all the way back to the node A.
+ In the next step, the algorithm goes back to the node A.
  At node A alpha will be compared between -∞ and 3. So now alpha will become 3 and beta will be ∞.
 
 Now the next step the algorithm will move to node C where the same values of alpha and beta will be transferred.
@@ -402,8 +403,8 @@ Now, C will return the node value to A and the best value of A will be between 1
 
 ![last_step](/last_step.jpg)
 
-To implement this in code it's actually super simple.
-All that is needed is to add the alpha and beta variables inside the minimax algorithm and simply check if beta is less or equal to alpha.
+To implement this in code it's super simple.
+All that is needed is to add the alpha and beta variables inside the minimax algorithm and simply check if the beta is less or equal to the alpha.
 
 
 Here is the updated code:

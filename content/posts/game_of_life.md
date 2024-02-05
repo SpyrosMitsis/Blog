@@ -95,7 +95,7 @@ To better understand the relative values I made this example:
 By adding `i` and `j` we can move the cursor to the relative position of the cell in question.
 
 
-All that's left now its to update the board.
+All that's left now is to update the board.
 
 ```python
     def next_board(self, row, col):
@@ -134,6 +134,5 @@ if __name__ == "__main__":
 
 To make the game a bit more visually appealing I implemented `os.system('cls')`, which clears the screen. (*Note*: only in Windows if you are using
 a Unix-based system change the `os.system('cls')` to `os.system(clear)`)
-
-The we print the board using a list comprehension, and wait for 0.5 seconds and then print the board again.
+Then we print the board using a list comprehension, wait for 0.5 seconds and then print the board again.
 
