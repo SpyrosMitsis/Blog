@@ -113,12 +113,12 @@ To empirically calculate the time complexity we create a list comprehension that
 an array of random integers of that specific size.
 
 We then get the starting timestamp before and after executing the function and calculate the difference.
-To plot everything we use matplotlib to create a plot and pass the array size as the X axis and the different timing as the Y axis.
+To plot everything we use a library called `matplotlib` to create a plot and pass the array size as the X axis and the different timing as the Y axis.
 
 This is the result:
-![plot_o(n)](/plot_o(n).webp)
+{{< image src="/plot_o(n).webp" alt="plot_o(n)" position=" center" style="border-radius: 8px;" >}}
 
-pretty linear.
+Yep, pretty linear.
 As the array size increases so does the time required to calculate the total amount of even numbers in that list.
 
 ## Bubble Sort
@@ -132,7 +132,7 @@ It gets its name because out of every pass, the highest number in the list alway
 The algorithm is pretty simple.
 - Iterate through the list
 - if the first number is bigger than the one next to it, switch the place
-- if the number is smaller ignore them and go to the next pair of number
+- if the number is smaller, ignore them and go to the next pair of number
 - rinse and repeat for the length of the array - 1 times.
 
 ### Example
@@ -151,17 +151,17 @@ The image shows what happens during the first pass.
 - We start from the beginning of the array at position `i = 0`.
 - We then get the element in the position `i + 1`.
 - We compare if `i > i + i`.
-In this, we see that at position `i=0`  we have `1` and at position
-`i + 1` we have the value 5.
+- In this case, we see that at position `i=0`  we have the value `1` and at position
+`i + 1` we have the value `5`.
 
-Now we check if `1 > 5, since it's not we don't do anything and move to the next pair.
+Now we check if `1 > 5`, since it's not we don't do anything and move to the next pair.
 
 In the case where `i = 1` the same thing happens.
 
 In the case of `i = 2` we see that in position `i = 2` we have the value `7` and in position
-`i + 1` we have the value 3.
+`i + 1` we have the value `5`.
 So in this case the comparison is true and so we switch them place.
-At this point, we finished the first iteration of the algorithm and now we have the value `7` at the very last place of our
+At this point, we finished the first pass of the algorithm and now we have the value `7` at the very last place of our
 array.
 
 Let's look at the second pass:
@@ -172,12 +172,12 @@ Because we already sorted the first biggest number there is no need to iterate o
 have just two iterations.
 
 Just like before we see that at position `i=0`  we have `1` and at position
-`i + 1` we have the value 5.
+`i + 1` we have the value `5`.
 So again no switch.
 
 At position `i = 1` we have `5` and at position `i + 1` we have the value `3`.
 In this case, we switch.
-At this point, we have reached the end of the unsorted part of the array so we can move on to the last iteration of the array, remember *4 element array, 3 iterations*.
+At this point, we have reached the end of the unsorted part of the array so we can move on to the last pass of the array. Remember *4 element array, 3 iterations*.
 
 Now the last pass of our algorithm.
 
@@ -185,7 +185,7 @@ Now the last pass of our algorithm.
 
 
 This last part is already sorted,
-so we check if `1 > `3`, if it's not, we reach the end of the unsorted part of the array, and now the whole array is sorted.
+so we check if `1 > 3`, because it's not, we don't do anything and we reach the end of the unsorted part of the array, and now the whole array is sorted.
 
 ### Code Implementation
 
@@ -246,7 +246,7 @@ $$
 n^2 + n
 $$
 
-And now because in Big o we can drop non-significant values we can say that:
+And now because in Big O we can drop non-significant values we can do this:
 $$
   n^2 + n \backsim n^2
 $$
