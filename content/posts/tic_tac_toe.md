@@ -6,9 +6,9 @@ toc: true
 images: 
 math: katex
 tags:
-  - Machine learning
-  - Minimax
-  - Python
+  - machine_learning
+  - minimax
+  - python
   - algorithm
 ---
 

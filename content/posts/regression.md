@@ -6,8 +6,9 @@ toc: true
 math: kalex
 images:
 tags:
-  - Python
-  - Machine_learning
+  - python
+  - machine_learning
+  - statistics
 ---
 
 In my last post, I explored two sorting algorithms and also discussed their time complexity, you can find it [here]({{< ref "/sorting_algo" >}}  ).
@@ -174,7 +175,7 @@ might make the algorithm diverge.
 {{< image src="/regression/too_big_learning_rate.png" alt="too_big_learning_rate" position=" center" style="border-radius: 8px;" >}}
 
 
-## Implementing Linear Regression
+### Implementing Linear Regression
 
 Now that we understand how linear regression and gradient descent work let's implement them in Python so that we can find
 the best curve to represent our method `find_even_numbers` that I showed in the previous blog post.
@@ -269,3 +270,143 @@ $b = -2.197994308940 * 10^{-13}$.
 
 
 
+
+## Polinomial Regression
+
+Now that we can manage to fit linear curves to points let's step it out a notch by fitting polynomials in our data points!
+
+Let's look at our first polynomial regression:
+
+$$
+Y = \beta_0 + \beta_1 X + ε
+$$
+
+Looks familiar?
+That is because technically speaking the vanilla linear regression is also a polynomial regression.
+More specifically linear regression is a first-order polynomial regression. 
+
+Now let's look at a second-order polynomial regression:
+
+$$
+Y = \beta_0 + \beta_1 X + \beta_2 X^2+ ε
+$$
+Basically, for every order of our regression we add a $b_k$ value and an $x^k$ variable.
+To generalize:
+
+$$
+Y = \beta_0 + \beta_1 X + \beta_2 X^2+ ... + \beta_k X^k + ε
+$$
+
+Now you might be wondering how can we fit this linear model with all these non-linear terms.
+Well, the important thing to remember is that we just care about the coefficients, not the variables.
+If we take a look at our formula *all the coefficients are linear*, this means this is s standard linear model!
+
+One thing to note that I won't be discussing in this blog post is how can we know which order should we stop
+when we have no idea what the order might be.
+To pick the optimal model we use the Bayesian Information Criterion (BIC). 
+
+
+### Calculating the error
+
+To minimize the error in our curve we take the same 
+mean square error formula as before
+
+$$
+E = \frac{1}{n} \sum_{i=0}^{n}(y_i - \hat{y}_i)^2
+$$
+
+but now in $\hat{y}$ we substite the quadratic formula $ax^2 + bx + c$.
+
+$$
+E = \frac{1}{n} \sum_{i=0}^{n}(y_i - (ax^2 + bx +c))^2
+$$
+
+### Minimizing the error
+
+To minimize it now, we simply perform the gradient descent method again and derive this equation
+with respect to $a$, $b$, $c$:
+
+
+$$
+\frac{\partial E}{\partial a} = - \frac{2}{n} \sum_{i=0}^{n} x_i^2 (y_i -(a x_i^2 +bx +c))
+$$
+
+$$
+\frac{\partial E}{\partial b} = - \frac{2}{n} \sum_{i=0}^{n} x_i (y_i -(a x_i^2 +bx +c))
+$$
+
+$$
+\frac{\partial E}{\partial c} = - \frac{2}{n} \sum_{i=0}^{n} (y_i -(a x_i^2 +bx +c))
+$$
+
+To minimize the error we now have to improve these 3 values $a$, $b$, $c$:
+
+$$
+a = a - L * \frac{\partial E}{\partial a}
+$$
+$$
+a = b - L * \frac{\partial E}{\partial b}
+$$
+$$
+c = c - L * \frac{\partial E}{\partial c}
+$$
+
+### Implementing Linear Regression
+
+We will now implement the `bubble_sort` algorithm that I showed in the previous post. 
+
+{{< image src="/regression/bubble_sort_graph.png" alt="bubble_sort_graph_plotted" position=" center" style="border-radius: 8px;" >}}
+
+From this picture, it's pretty clear that we are dealing with a quadratic equation.
+So let's create a gradient descent function for quadratic equations:
+
+```python
+def quad_gradient_descent(a_now, b_now, c_now, x_data, y_data, L):
+    a_gradient = 0
+    b_gradient = 0
+    c_gradient = 0
+
+    n = len(x_data)
+
+    for i in range(n):
+        x = x_data[i]
+        y = y_data[i]
+
+        a_gradient += -(2/n) * x ** 2 * (y - (a_now * x**2 + b_now * x + c_now))
+        b_gradient += -(2/n) * x * (y - (a_now * x**2 + b_now * x + c_now))
+        c_gradient += -(2/n) * (y - (a_now * x**2 + b_now * x + c_now))
+
+    a = a_now - a_gradient * L
+    b = b_now - b_gradient * L
+    c = c_now - c_gradient * L
+
+    return a, b, c
+```
+
+This function returns our three optimized parameters in a tuple $a$, $b$, $c$.
+
+Now let's initialize our values, set the learning rate and show our plot:
+
+```python
+a = 0
+b = 0
+c = 0
+L = 0.00000000000001
+
+epochs = 10000
+
+for i in range(epochs):
+    a, b, c = quad_gradient_descent(a, b, c, values, bubble_time_complexity, L)
+
+print(a, b, c)
+
+plt.scatter(values, bubble_time_complexity)
+x_range = np.linspace(0, 4000, 100)
+quadratic_curve = a * x_range**2 + b * x_range + c
+plt.plot(x_range, quadratic_curve, color="red")
+```
+
+{{< image src="/regression/bubble_sort_graph_plotted.png" alt="bubble_sort_graph_plotted" position=" center" style="border-radius: 8px;" >}}
+
+We successfully managed to fit our curve and now we can see that our parabola has $a =3.19418* 10^{-8}$,
+$b =  5.79448 * 10^{-10}$ and $c = 5.01148 * 10^{-13}$.

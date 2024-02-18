@@ -37,9 +37,9 @@ pygmentsStyle = "github-dark"
   name = "linkedin"
   url = "https://www.linkedin.com/in/spyridon-mitsis/"
 
-  [[params.social]]
-  name = "kaggle"
-  url = "https://www.kaggle.com/SpyrosMitsis"
+  # [[params.social]]
+  # name = "kaggle"
+  # url = "https://www.kaggle.com/SpyrosMitsis"
 
 [taxonomies]
     category = "blog"
