@@ -410,3 +410,70 @@ plt.plot(x_range, quadratic_curve, color="red")
 
 We successfully managed to fit our curve and now we can see that our parabola has $a =3.19418* 10^{-8}$,
 $b =  5.79448 * 10^{-10}$ and $c = 5.01148 * 10^{-13}$.
+
+### Fitting a logarithm
+
+Fitting a logarithm is no different from fitting any type of polynomial because, again, 
+all the coefficients are still linear! 
+
+To fit the time complexity of the last algorithm `quick_sort` we need an equation of type:
+
+$$
+  Y = \beta_0 X * \log(X) + \beta_1
+$$
+
+Let's implement our gradient descent again:
+
+```python
+def x_log_gradient_descent(a_now, b_now, x_data, y_data, L):
+    a_gradient = 0
+    b_gradient = 0
+
+    n = len(x_data)
+
+    for i in range(n):
+        x = x_data[i]
+        y = y_data[i]
+
+        # Compute gradients
+        a_gradient += -(2/n) * x * np.log(x) * (y - (a_now * x * np.log(x) + b_now))
+        b_gradient += -(2/n) * x * (y - (a_now * x * np.log(x) + b_now))
+
+    # Update parameters using gradients and learning rate
+    a = a_now - a_gradient * L
+    b = b_now - b_gradient * L
+
+    return a, b
+```
+
+
+Now, initialize the learning rate and our parameters:
+
+```python
+a = 0
+b = 0
+L = 0.000000001
+
+epochs = 100000
+
+for i in range(epochs):
+    a, b = x_log_gradient_descent(a, b, values, quick_time_complexity, L)
+
+print(a, b)
+```
+
+We get our resulting parameters to be $3.3565* 10^{-6}$ and $3.5767 * 10^{-5}$.
+
+
+
+Now by plotting it:
+
+```python
+plt.scatter(values, quick_time_complexity)
+a_range = np.linspace(100, 4000, 100)
+log_curve = a * x_range * np.log(x_range) + b
+plt.plot(x_range, log_curve, color="red")
+```
+We get our curve that best first our data, given the learning rate and epoch.
+
+{{< image src="/regression/quick_sort_graph_plotted.png" alt="quick_sort_graph_plotted" position=" center" style="border-radius: 8px;" >}}
