@@ -1,5 +1,5 @@
 ---
-title: "Quick sort and bubble sort time complexity"
+title: "Quicksort And Bubblesort Time Complexity"
 date: 2024-02-08T14:40:48+02:00
 draft: false
 toc: true

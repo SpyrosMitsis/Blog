@@ -1,5 +1,5 @@
 ---
-title: "Regression and curve fitting"
+title: "Regression And Curve Fitting"
 date: 2024-02-16T13:52:05+02:00
 draft: false
 toc: true

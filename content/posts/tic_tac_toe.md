@@ -1,5 +1,5 @@
 ---
-title: "Using the minimax algorithm for Tic Tac Toe "
+title: "Using The Minimax Algorithm For Tic Tac Toe "
 date: 2024-01-31T13:56:01+02:00
 draft: false
 toc: true

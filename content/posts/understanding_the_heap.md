@@ -1,7 +1,7 @@
 ---
-title: "Understanding the heap"
+title: "Understanding The Heap"
 date: 2024-02-21T17:31:13+02:00
-draft: false 
+draft: false
 toc: true
 images:
 math: kalex
@@ -14,7 +14,7 @@ tags:
 
 
 Let's say have a hospital manager and you are short-staffed on doctors.
-Because you are short-staffed staffed you can't just take care of all the patients immediately.
+Because you are short-staffed you can't just take care of all the patients immediately.
 You have to triage.
 What you need to do is when a patient comes, asses their status and give them a priority number associated with the severness of their case.
 What you need is a priority queue!
@@ -110,7 +110,7 @@ In this image we have a complete binary tree, even though it's not full, the chi
 {{< image src="/understanding_the_heap/correct_tree.png" alt="correct_tree" position=" center" style="border-radius: 8px;" >}}
 
 
-In this image doesn't have a complete binary tree, because we can see that, going from left to right, the first two nodes don't have children and only the third one has
+This image doesn't have a complete binary tree, because we can see that, going from left to right, the first two nodes don't have children and only the third one has
 {{< image src="/understanding_the_heap/wrong_tree.png" alt="wrong_tree" position=" center" style="border-radius: 8px;" >}}
 
 
@@ -174,7 +174,7 @@ Ok, easy enough, but now what do we put at the root of the heap?
 We know for a fact that we can only remove elements by doing the inverse of insertion.
 We can remove elements from the heap from the bottom up and from right to left.
 
-Taking as an example this heap:
+Take as an example this heap:
 
 {{< image src="/understanding_the_heap/remove_first_phase.png" alt="remove_first_phase" position=" center" style="border-radius: 8px;" >}}
 
@@ -210,7 +210,7 @@ Our heap will now look like this!
 
 ## Choosing a heap over a linked list
 
-When implementing a priority queue there are several advantages in using a heap rather than a linked list.
+When implementing a priority queue there are several advantages to using a heap rather than a linked list.
 Most notable is their efficiency.
 
 Heaps provide efficient insertion and deletion of elements, both of which are common operations in a priority queue. 
@@ -263,11 +263,11 @@ class PriorityQueue:
         return len(self.heap) == 0
 ```
 
-The first methods is the contractor, which runs every time the class gets instantiated.
+The first method is the contractor, which runs every time the class gets instantiated.
 
 The `__repr__` method is a special method that returns the string representation of an object
 
-The `parent` returns the parent of a node based on its index, and so do the `left_child` and `right child` methods.
+The `parent` returns the parent of a node based on its index, and so do the `left_child` and `right_child` methods.
 
 The `swap` method swaps the nodes.
 
@@ -292,7 +292,7 @@ to maintain the min-heap property.
 The `heapify_up` method calls the swap method, while the index is more than 0, because index 0 is the root of the heap,
 and the parent of our node is bigger than it. 
 *NOTE*: this time we are implementing a min-heap
-At the end it sets the parent of the node to the node it self so that in the next pass, we can check the new parent.
+At the end it sets the parent of the node to the node itself so that in the next pass, we can check the new parent.
 
 
 ```python

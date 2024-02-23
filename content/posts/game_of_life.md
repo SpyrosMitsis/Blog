@@ -1,5 +1,5 @@
 ---
-title: "Conway's Game of Life in Python"
+title: "Conway's Game Of Life In Python"
 date: 2024-02-06T00:11:52+02:00
 draft: false
 toc: true
